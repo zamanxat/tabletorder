@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Sales Input — Босс</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#04060a;
+    --bg2:#071028;
+    --accent1:#7c3aed;
+    --accent2:#06b6d4;
+    --card: rgba(255,255,255,0.03);
+    --muted:#9fb7ce;
+    --text:#e6f4ff;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;color:var(--text);-webkit-font-smoothing:antialiased}
+  body{
+    background:
+      radial-gradient(700px 360px at 12% 12%, rgba(124,58,237,0.08), transparent 6%),
+      radial-gradient(600px 300px at 88% 88%, rgba(6,182,212,0.06), transparent 6%),
+      linear-gradient(180deg,var(--bg1),var(--bg2));
+    min-height:100vh;display:flex;flex-direction:column;
+  }
+
+  nav{
+    position:sticky;top:0;z-index:50;
+    display:flex;align-items:center;justify-content:space-between;padding:12px 6%;
+    background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-bottom:1px solid rgba(255,255,255,0.02);
+    backdrop-filter: blur(6px);
+  }
+  .brand{display:flex;gap:12px;align-items:center}
+  .logo{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700}
+  nav h1{margin:0;font-size:16px;background:linear-gradient(90deg,#9be0ff,#d6b6ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+  main{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 16px}
+  .formwrap{width:100%;max-width:520px;padding:18px;border-radius:18px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:0 30px 70px rgba(2,6,23,0.6);backdrop-filter: blur(8px)}
+
+  form{display:flex;flex-direction:column;gap:10px}
+  label{font-size:13px;color:#cfe8ff;margin-bottom:6px}
+  select,input{
+    width:100%;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);
+    background: linear-gradient(90deg,#0b1220,#08101b); color:var(--text); font-size:15px; outline:none;
+  }
+  select:focus,input:focus{ box-shadow:0 10px 30px rgba(124,58,237,0.06); transform: translateY(-2px); border-color: rgba(124,58,237,0.5) }
+
+  .row{display:flex;gap:12px}
+  .row > *{flex:1}
+
+  .btn{
+    margin-top:8px;padding:12px;border-radius:12px;border:0;font-weight:700;font-size:15px;
+    background: linear-gradient(90deg,var(--accent1),var(--accent2));
+    color:white;cursor:pointer;box-shadow: 0 14px 36px rgba(7,10,30,0.6);
+  }
+  .btn:active{ transform: translateY(1px) }
+
+  .muted{font-size:13px;color:var(--muted);margin-top:6px}
+  .status{font-size:14px;color:#bfe8ff;margin-top:6px;min-height:20px}
+
+  .toast{ position:fixed;left:50%;transform:translateX(-50%);bottom:22px;padding:12px 18px;border-radius:12px;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#eaffff;font-weight:700;box-shadow:0 12px 40px rgba(0,0,0,0.6);opacity:0;pointer-events:none;transition:all .28s}
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(-8px); pointer-events:auto }
+
+  footer{padding:14px;text-align:center;color:var(--muted);font-size:13px;border-top:1px solid rgba(255,255,255,0.02);background:linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005))}
+
+  @media (max-width:560px){
+    .formwrap{padding:14px;border-radius:12px}
+    nav{padding:10px 5%}
+  }
+</style>
+</head>
+<body>
+  <nav>
+    <div class="brand">
+      <div class="logo"><img src="logo.jpg" alt="logo" style="width: 40px; border-radius: 11px;"></div>
+      <h1>LA-ROSSA</h1>
+    </div>
+    <!-- <div class="muted">Бір файлта — барлығы</div> -->
+  </nav>
+
+  <main>
+    <div class="formwrap" role="region" aria-label="Продажа формасы">
+      <form id="salesForm" autocomplete="off" novalidate>
+        <label for="manager">Менеджер</label>
+        <select id="manager" name="manager" required>
+          <option value="">Менеджер</option>
+          <option>Нұрсұлтан</option>
+          <option>Қарақат</option>
+          <option>Аружан</option>
+          <option>Жанар</option>
+          <option>Жадыра</option>
+          <option>Күнарай</option>
+        </select>
+
+        <div class="row">
+          <div>
+            <label for="day">Күн (1–31)</label>
+            <input id="day" name="day" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="6" required autocomplete="off" />
+          </div>
+          <div>
+            <label for="count">Саны</label>
+            <input id="count" name="count" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="1" required autocomplete="off" />
+          </div>
+        </div>
+
+        <label for="price">Бағасы (₸)</label>
+        <input id="price" name="price" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="58500" required autocomplete="off" />
+
+        <button id="sendBtn" class="btn" type="submit">Жіберу</button>
+        <div id="status" class="status"></div>
+      </form>
+    </div>
+  </main>
+
+  
+
+  <footer>© LA-ROSSA - Бәрі команда үшін 😇🩶</footer>
+
+  <div id="toast" class="toast">Жіберілді ✅</div>
+
+<script>
+(function(){
+  // <-- Пастеңіз: Apps Script Web App exec URL (Deploy -> Web app -> exec URL)
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnuy_ygsl2jXdxDZJRZCWibq8T2JwjCyMb9LnrPOxlIc3ZjpTkvVkOCDPUX3v1v6eEEA/exec";
+
+  const form = document.getElementById('salesForm');
+  const status = document.getElementById('status');
+  const toast = document.getElementById('toast');
+  const sendBtn = document.getElementById('sendBtn');
+
+  function showToast(text, ok = true) {
+    toast.textContent = text;
+    toast.style.background = ok ? "linear-gradient(90deg,#7c3aed,#06b6d4)" : "linear-gradient(90deg,#ff6b6b,#6b2d2d)";
+    toast.classList.add('show');
+    setTimeout(()=> toast.classList.remove('show'), 2300);
+  }
+
+  function onlyDigits(s) { return (s || '').toString().replace(/\D+/g,''); }
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    status.textContent = "Жіберілуде...";
+    sendBtn.disabled = true;
+
+    const manager = (form.manager.value || "").trim();
+    const day = onlyDigits(document.getElementById('day').value);
+    const count = onlyDigits(document.getElementById('count').value);
+    const price = onlyDigits(document.getElementById('price').value);
+
+    if (!manager || !day || !count || !price) {
+      status.textContent = "Барлық өрістерді толтырыңыз.";
+      sendBtn.disabled = false;
+      return;
+    }
+    if (Number(day) < 1 || Number(day) > 31) {
+      status.textContent = "Күн 1–31 арасында болуы керек.";
+      sendBtn.disabled = false;
+      return;
+    }
+
+    // form-encoded body — no-cors достық
+    const params = new URLSearchParams();
+    params.append('manager', manager);
+    params.append('day', day);
+    params.append('count', count);
+    params.append('price', price);
+
+    try {
+      await fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: params
+      });
+
+      status.textContent = "Сәтті жіберілді!";
+      showToast("Жіберілді ✅", true);
+      form.reset();
+    } catch (err) {
+      status.textContent = "Жіберу қатесі: " + (err.message || err);
+      showToast("Қате ❌", false);
+    } finally {
+      sendBtn.disabled = false;
+    }
+  });
+
+  // UX tweak: focus numeric inputs -> numeric keyboard on many devices
+  ['day','count','price'].forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener('focus', ()=> setTimeout(()=> el.setAttribute('inputmode','numeric'), 50));
+  });
+})();
+</script>
+</body>
+</html>
